@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)pfp2p4@wag2(m*xf2m-_o^au2nucglt7@#c31hfmqgr-ebj-7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 AUTHENTICATION_BACKENDS = ['accounts.backends.CustomBackend', 'django.contrib.auth.backends.ModelBackend']
 
@@ -141,7 +141,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = '/accounts/login/'
 LOGIN_SUCCESS_URL = '/profile/1'
-
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
