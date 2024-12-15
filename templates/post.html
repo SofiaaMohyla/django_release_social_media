@@ -1,0 +1,21 @@
+<div class="card m-4" style="width: 50rem;">
+    <div class="card-header d-flex justify-content-between">
+        {% if post.profile %}
+        <a class="h3 text-decoration-none" href="{% url "profile:profile-detailed" pk=post.profile.pk %}">{{ post.created_by.username }}</a>
+        {% elif post.group %}
+        <a class="h3 text-decoration-none" href="{% url "groups:group-detailed" pk=post.group.pk %}">{{ post.group.title }} (group)</a>
+        {% elif post.channel %}
+        <a class="h3 text-decoration-none" href="{% url "groups:channel-detailed" pk=post.channel.pk %}">{{ post.group.title }} (channel)</a>
+        {% endif %}
+        <span>{{ post.created_at|date:"d F" }}</span>
+    </div>
+    
+  <div class="card-body">
+      <a class="text-decoration-none text-white" href="{% url "posts:post-detailed" post.pk %}">
+      {% if post.media %}
+          <img src="{{ post.media.url }}" class="card-img-top img-fluid" alt="..." style="max-height: 500px">
+      {% endif %}
+    <h3 class="card-title mt-3">{{ post.title }}</h3>
+      </a>
+  </div>
+</div>

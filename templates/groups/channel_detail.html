@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>{{ channel.title }}</title>
+{% endblock %}
+{% block content %}
+	<div class="container">
+        <div class="align-items-center d-flex m-3">
+            {% if channel.channel_picture %}
+            <img src="{{ channel.channel_picture.url }}" alt="Profile Picture" class="me-3"
+                 style="border-radius: 50%; width: 200px; height:200px; border: 2px grey solid">
+            {% endif %}
+            <div>
+                <h2>{{ channel.title }}</h2>
+                <h5>{{ channel.description }}</h5>
+            </div>
+        </div>
+    <form action="{% url "groups:channel-join" pk=channel.pk %}" method="POST">
+        {% csrf_token %}
+        {{ joining.as_div }}
+        <button type="submit" class="btn btn-danger">Join</button>
+        {% if current_viewer.is_admin == True %}
+            <a href="{% url "groups:channel-create-post" pk=channel.pk %}" class="ms-2 btn btn-primary">Create Post</a>
+        {% endif %}
+    </form>
+        <a href="{% url "groups:viewers-list" pk=channel.pk %}" class="btn btn-light">Viewers</a>
+    <h3 class="mt-5">Posts</h3>
+    {% for post in posts %}
+    {% include "post.html" %}
+    {% endfor %}
+    </div>
+{% endblock %}

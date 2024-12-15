@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Channels List</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <a href="{% url "groups:channel-create" %}"class="btn btn-primary mb-3">Create Channel</a>
+        {% for channel in channels %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ channel.title }}</h5>
+                    <p class="card-text">{{ channel.description }}</p>
+                    <a href="{% url "groups:channel-detailed" pk=channel.pk %}" class="stretched-link"></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

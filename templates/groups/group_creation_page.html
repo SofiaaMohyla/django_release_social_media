@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>Group Creation</title>
+{% endblock %}
+{% block content %}
+	<div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <button type="submit" class="btn btn-success">Create Group</button>
+        </form>
+    </div>
+{% endblock %}

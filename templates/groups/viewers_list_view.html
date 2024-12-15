@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>Viewers of {{ viewers.first.channel }} channel</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% for viewer in viewers %}
+                <div class="col-12 col-md-4">
+                    <div class="card mt-3">
+                        <div class="d-flex align-items-center justify-content-center">
+                            {% if viewer.user.pfp %}
+                                <img src="{{ viewer.user.pfp.url }}" alt="Profile Picture" class="m-3"
+                                     style="border-radius: 50%; width: 200px; height:200px; border: 2px grey solid">
+                            {% endif %}
+                            <h3 class="card-title">{{ viewer.user.username }}</h3>
+                            <a href="{% url "profile:profile-detailed" pk=viewer.user.pk %}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

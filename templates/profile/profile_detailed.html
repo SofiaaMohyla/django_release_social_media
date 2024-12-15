@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}
+    {% if profile %}
+        <title>{{ profile.username }}'s Profile</title>
+    {% elif my_profile %}
+        <title>{{ my_profile.username }}</title>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if profile %}
+        <header class="container p-3 mb-3" style='
+                {% if profile.banner %} 
+                    background: no-repeat url("{{ profile.banner.url }}") center; 
+                {% else %} 
+                    background: no-repeat linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%); 
+                {% endif %}background-size:cover;'>
+            <div class="">
+                    <div class="align-items-center d-flex m-3">
+                        {% if profile.pfp %}
+                    <img src="{{ profile.pfp.url }}" alt="Profile Picture" class="me-3"
+                         style="border-radius: 50%; width: 200px; height:200px; border: 2px grey solid">
+                {% endif %}
+                <div>
+                    <h1 style="text-shadow: 10px 5px 5px black;">{{ profile.username }}</h1>
+                    <h5 style="text-shadow: 10px 5px 5px black;">{{ profile.bio }}</h5>
+                </div>
+                </div>
+                <p>{{ friends_count }} friends</p>
+                <p>{{ subscribers_count }} subscribers</p>
+        </header>
+                <div class="d-flex container">
+                    {% if not subscription %}
+                        <form action="{% url 'profile:subscribe' pk=profile.pk %}" method="POST">
+                            {% csrf_token %}
+                            {{ subscription_form.as_div }}
+                            <button type="submit" class="btn btn-danger">Subscribe</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url "profile:unsubscribe" pk=subscription.first.pk %}"
+                           class="btn btn-secondary">Unsubscribe</a>
+                    {% endif %}
+                {% if friendship %}
+                    <a href="{% url "profile:friendship-delete" pk=friendship.first.pk %}" class="btn btn-success">You are friends</a>
+                    {% else %}
+                    {% if not friendrequest %}
+                        <form action="{% url 'profile:friendrq' pk=profile.pk %}" method="POST">
+                            {% csrf_token %}
+                            {{ subscription_form.as_div }}
+                            <button type="submit" class="btn btn-success">Send Friend Request</button>
+                        </form>
+                    {% elif friendrequest %}
+                        <a href="{% url "profile:friendreq-delete" pk=friendrequest.first.pk %}"
+                           class="btn btn-warning">Delete
+                            Friend Request</a>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <div class="container">
+                    {% for post in profile.profile_posts.all %}
+                        {% include "post.html" %}
+                    {% endfor %}
+                </div>
+        
+        
+    {% endif %}
+    {% if my_profile %}
+
+        <header class="container p-3 mb-3" style='
+                {% if my_profile.banner %} 
+                    background: no-repeat url("{{ my_profile.banner.url }}") center; 
+                {% else %} 
+                    background: no-repeat linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%); 
+                {% endif %}background-size:cover;'>
+
+            {% if my_profile.pfp %}
+                <div class="align-items-center d-flex m-3">
+                <img src="{{ my_profile.pfp.url }}" alt="Profile Picture" class="me-3"
+                     style="border-radius: 50%; width: 200px; height:200px; border: 2px grey solid">
+            {% endif %}
+            <div>
+                <h1 style="text-shadow: 10px 5px 5px black;">{{ my_profile.username }}</h1>
+                <h5 style="text-shadow: 10px 5px 5px black;">{{ my_profile.bio }}</h5>
+                <h5>{{ friends_count }} friends</h5>
+                <h5>{{ subscribers_count }} subscribers</h5>
+            </div>
+            </div>
+        </header>
+        <div class="container">
+            <a href="{% url 'profile:profile-update' %}" class="btn btn-primary">Edit Profile</a>
+
+        </div>
+        <div class="container">
+            {% for post in my_profile.profile_posts.all %}
+                {% include "post.html" %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+{% endblock %}

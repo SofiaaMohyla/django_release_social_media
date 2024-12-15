@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>{{ post.title }}</title>
+{% endblock %}
+{% block content %}
+	<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-7">
+        <h2>{{ post.title }}</h2>
+        {% if post.media %}
+        <img class="img-fluid" src="{{ post.media.url }}" alt="Post Image" style="max-height: 500px">
+        {% endif %}
+        <p>{{ post.description }}</p>
+        <p>Posted at: {{ post.created_at }}</p>
+        <p></p>
+        <a href="{% url 'profile:profile-detailed' pk=post.created_by.pk %}">{{ post.created_by }}</a>
+        {% if post.created_by == request.user.profile %}
+        <a href="{% url 'posts:delete-post' pk=post.pk %}" class="btn btn-danger m-2">Delete Post</a>
+        <a href="{% url 'posts:update-post' pk=post.pk %}" class="btn btn-primary m-2">Update Post</a>
+
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <div class="d-flex ">
+        {% if not like %}
+        <form action="{% url "posts:liking-post" pk=post.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary "><i class="bi bi-heart"></i> {{ likes_count }}</button>
+        </form>
+        {% else %}
+        <form action="{% url "posts:like-delete" pk=like.first.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger"><i class="bi bi-heart-fill"></i> {{ likes_count }}</button>
+        </form>
+        {% endif %}
+        {% if not repost %}
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success ms-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="bi bi-repeat"></i> {{ repost_count }}
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url "posts:repost-create" pk=post.pk %}" method="POST">
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            {{ repost_form.as_div }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Repost</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <form action="{% url "posts:repost-delete" pk=repost.first.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success ms-3">
+                <i class="bi bi-repeat"></i> {{ repost_count }}
+</button>
+        </form>
+        {% endif %}
+</div>
+        {% endif %}
+        </div>
+    
+    <div class="col-12 col-md-5">
+        <form action="{% url 'posts:commenting-post' pk=post.pk %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_div }}
+            <button type="submit" class="btn btn-success">Create Comment</button>
+        </form>
+        
+        {% if comments %}
+        {% for comment in comments %}
+        <div class="card mt-3">
+            <div class="card-body">
+                {% if request.user.profile == comment.created_by %}
+                <a href="{% url 'posts:comment-delete' pk=comment.pk %}" class="btn btn-danger"><i
+                        class="bi bi-trash-fill"></i></a>
+                <a href="{% url "posts:comment-update" pk=comment.pk %}" class="btn btn-primary"><i
+                        class="bi bi-pencil-square"></i></a>
+                {% endif %}
+
+                <h5 class="card-title">{{ comment.created_by }}</h5>
+                <p class="card-text">{{ comment.content }}</p>
+                <p class="card-text mt-4">This comment was added at {{ comment.created_at }}</p>
+
+            </div>
+        </div>
+        {% endfor %}
+
+        {% endif %}
+    </div>
+    </div>
+    </div>
+{% endblock %}

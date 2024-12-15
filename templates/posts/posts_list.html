@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>Posts List</title>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+    {% if user.is_authenticated %}
+	<div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                {% for post in posts %}
+                        {% include "post.html" %}
+                
+                {% endfor %}
+                {% for page_num in page_obj.paginator.page_range %}
+                    <a href="?page={{ page_num }}" class="d-inline-block">{{ page_num }}</a>
+                {% endfor %}
+            </div>
+            <div class="col-2"></div>
+
+        </div>
+    </div>
+    {% else %}
+    <h2>Authorize to see content</h2>
+    {% endif %}
+{#    <script>#}
+{#    function ajaxSend(){#}
+{#        fetch('')#}
+{#            .then(response => response.text())#}
+{#            .then(data => {#}
+{#                alert(data)#}
+{#            })#}
+{#            .catch(error => console.log('Error:', error));#}
+{#    }#}
+{#    </script>#}
+{% endblock %}

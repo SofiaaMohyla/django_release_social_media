@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>Delete Confirmation</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% include 'alerts.html' %}
+        <div class="d-flex justify-content-center align-items-center">
+            <form method="post" class="">
+                {% csrf_token %}
+                <h3>Are you sure?</h3>
+                <button class="btn btn-light" type="submit"> Yes, delete </button>
+                <a href="{% url 'posts:posts-list' %}" class="btn btn-secondary"> No </a>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

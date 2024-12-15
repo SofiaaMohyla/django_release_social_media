@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>Groups List</title>
+{% endblock %}
+{% block content %}
+	<div class="container">
+    <a href="{% url "groups:group-create" %}" class="btn btn-primary mb-3">Create Group</a>
+    <div class="row">
+    {% for group in groups %}
+        <div class="col-6 col-md-4">
+        <div class="card mb-3" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{ group.title }}</h5>
+            <p class="card-text">{{ group.description }}</p>
+            <a href="{% url "groups:group-detailed" pk=group.pk %}" class="stretched-link"></a>
+          </div>
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+    </div>
+{% endblock %}

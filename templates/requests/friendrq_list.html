@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+	<title>Your Friend Requests</title>
+{% endblock %}
+{% block content %}
+	<div class="container m-3">
+        {% for friend_request in friend_requests %}
+            <div class="col-6 col-md-4">
+            <div class="d-flex">
+                <h1>{{ friend_request.sender }}</h1>
+                <form action="{% url "profile:friendship" pk=friend_request.pk %}" method="POST">
+                    {% csrf_token %}
+                    {{ friendship_form.as_div }}
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
