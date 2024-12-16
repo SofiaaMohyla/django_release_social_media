@@ -17,6 +17,6 @@ COPY . /app/
 
 RUN python manage.py collectstatic --noinput
 
-EXPOSE 8000
+EXPOSE 8080
 
-ENTRYPOINT [ "gunicorn", "social_media.wsgi", "-b", "0.0.0.0:8000"]
+ENTRYPOINT [ "gunicorn", "social_media.wsgi", "-b", "0.0.0.0:8080"]
